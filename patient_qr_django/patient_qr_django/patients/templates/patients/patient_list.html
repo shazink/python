@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient List - Hospital Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .header .admin-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .header .admin-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .patient-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .patient-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .patient-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .patient-id {
+            font-size: 0.9rem;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .patient-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .patient-info {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .patient-info p {
+            margin: 5px 0;
+        }
+
+        .qr-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .qr-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .empty-state {
+            text-align: center;
+            color: white;
+            padding: 60px 20px;
+        }
+
+        .empty-state h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Hospital Management System</h1>
+            <p>View all registered patients and their QR codes</p>
+            <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
+                <a href="/appointments/" class="admin-link">📅 Appointments</a>
+                <a href="/admin/" class="admin-link">🔐 Admin Login</a>
+            </div>
+        </div>
+
+        {% if patients %}
+        <div class="patient-grid">
+            {% for patient in patients %}
+            <div class="patient-card">
+                <div class="patient-id">{{ patient.patient_id }}</div>
+                <div class="patient-name">{{ patient.name }}</div>
+                <div class="patient-info">
+                    <p><strong>Age:</strong> {{ patient.age }} years</p>
+                    <p><strong>Disease:</strong> {{ patient.disease|default:"-" }}</p>
+                    <p><strong>Phone:</strong> {{ patient.phone }}</p>
+                    {% if patient.blood_group %}
+                    <p><strong>Blood Group:</strong> {{ patient.blood_group }}</p>
+                    {% endif %}
+                    <p><strong>Doctor:</strong> {{ patient.doctor.name|default:"Not Assigned" }}</p>
+                </div>
+                <a href="{% url 'patients:patient_qr' patient.patient_id %}" class="qr-button">
+                    🔲 View QR Code
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <h2>No patients registered yet</h2>
+            <p>Click "Admin Login" above to add your first patient!</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Appointments - Test</title>
+</head>
+
+<body>
+    <h1>Appointments List</h1>
+    <p>Testing appointments page</p>
+    <a href="/">Back to Home</a>
+
+    {% if appointments %}
+    <ul>
+        {% for appointment in appointments %}
+        <li>{{ appointment }}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No appointments</p>
+    {% endif %}
+</body>
+
+</html>
